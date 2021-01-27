@@ -19,14 +19,17 @@ fn main() {
         .expect("file should have OS key");
 
     //println!("{}", &os);}
-    
-    let commands = vec!["git add .", "\"git commit -m \"automated commit \"\"", "git push"];
+    let git_add = vec!["/C", "git", "add", "."];
+    let git_commit = vec!["/C", "git", "commit", "-m", "\"automated commit\""];
+    let git_push = vec!["/C", "git", "push"];
+
+    let commands = vec![&git_add, &git_commit, &git_push];
     let iterable_commands = commands.iter();
 
-    for command in iterable_commands{
+    for &command in iterable_commands{
         let output = {
             Command::new("cmd")
-                    .args(&["/C", &command])
+                    .args(&*command)
                     .status()
                     .expect("failed to execute process")
         };

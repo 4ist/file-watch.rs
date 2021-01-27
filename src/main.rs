@@ -20,7 +20,7 @@ fn main() {
 
     //println!("{}", &os);}
     
-    let commands = vec!["git add .", "git commit -m \"automated commit \"", "git push"];
+    let commands = vec!["git add .", "\"git commit -m \"automated commit \"\"", "git push"];
     let iterable_commands = commands.iter();
 
     for command in iterable_commands{

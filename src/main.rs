@@ -21,7 +21,7 @@ fn main() {
 
     //println!("{}", &os);}
     let git_add = vec!["/C", "git", "add", "."]; //TODO add this to a try/catch to handle being ran outside a git repo
-    let git_commit = vec!["/C", "git", "commit", "-m", "\"automated commit\""];
+    let git_commit = vec!["/C", "git", "commit", "-m", "automated commit without double quotes test"];
     let git_push = vec!["/C", "git", "push"]; //TODO add this to a try/catch to handle repos without remote master
 
     let commands = vec![&git_add, &git_commit, &git_push];

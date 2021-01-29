@@ -1,5 +1,5 @@
 [package]
-name = "file-watch"
+name = "file-watch-rs"
 version = "0.1.0"
 authors = ["4ist <frichardson062@gmail.com>"]
 edition = "2018"

@@ -40,9 +40,11 @@ fn main() {
     let iterable_commands = commands.iter();
 
     for command in iterable_commands{
+        let mut win_command = command.clone();
+        win_command.insert(0, String::from("/C"));
         let _output = {
             Command::new("cmd") //Refactor this
-                    .args(&*command)
+                    .args(&*win_command)
                     .status()
                     .expect("failed to execute process")
         };
@@ -68,9 +70,9 @@ macro_rules! string_vec {
 }
 
 fn get_windows_commands() -> Vec<Vec<String>> { 
-    let git_add = string_vec!["/C", "git", "add", "."]; //TODO add this to a try/catch to handle being ran outside a git repo
-    let git_commit = string_vec!["/C", "git", "commit", "-m", "automated commit"];
-    let git_push = string_vec!["/C", "git", "push"]; //TODO add this to a try/catch to handle repos without remote master
+    let git_add = string_vec!["git", "add", "."]; //TODO add this to a try/catch to handle being ran outside a git repo
+    let git_commit = string_vec!["git", "commit", "-m", "automated commit"];
+    let git_push = string_vec!["git", "push"]; //TODO add this to a try/catch to handle repos without remote master
 
     let commands = vec![git_add, git_commit, git_push];
     return commands;

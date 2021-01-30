@@ -36,28 +36,36 @@ fn main() {
     }
 
     let os = lil_config.get("OS").expect("file should have OS key");
-    let commands = get_commands(&os);
-    let iterable_commands = commands.iter();
 
-    for command in iterable_commands{
-        let mut win_command = command.clone();
-        win_command.insert(0, String::from("/C"));
-        let _output = {
-            Command::new("cmd") //Refactor this
-                    .args(&*win_command)
-                    .status()
-                    .expect("failed to execute process")
-        };
+    let commands = get_commands(&os);
+    for command in commands.iter(){
+        let mut acommand = command.clone();
+        acommand.status().expect("failed to execute process"); //? why is this throwing an error if I'm doint the same thing in get_windows_commands?
     }
-    
 }
 
-fn get_commands(os: &str) -> Vec<Vec<String>>{   //TODO figure out how to return an iterable
+fn get_commands(os: &str) -> Vec<Command>{   //TODO figure out how to return an iterable
+    let app_commands = get_git_commands();
     match &os[..] {
-        "windows" => get_windows_commands(),
+        "windows" => get_windows_commands(app_commands),
         //"linux" => println!("OS config = linux"),
         _ => panic!("unsupported OS config: {}", &os[..])
     }
+}
+
+fn get_windows_commands(app_commands: Vec<Vec<String>>) -> Vec<Command>{
+    let mut windows_commands: Vec<Command> = vec![];
+    
+    for app_command in app_commands.iter(){
+        let mut win_command = Command::new("cmd");
+
+        let mut win_command_args = app_command.clone();
+        win_command_args.insert(0, String::from("/C"));
+        win_command.args(&*win_command_args);
+
+        windows_commands.push(win_command)
+    }
+    return windows_commands; 
 }
 
 macro_rules! string_vec {
@@ -69,7 +77,7 @@ macro_rules! string_vec {
     });
 }
 
-fn get_windows_commands() -> Vec<Vec<String>> { 
+fn get_git_commands() -> Vec<Vec<String>> { 
     let git_add = string_vec!["git", "add", "."]; //TODO add this to a try/catch to handle being ran outside a git repo
     let git_commit = string_vec!["git", "commit", "-m", "automated commit"];
     let git_push = string_vec!["git", "push"]; //TODO add this to a try/catch to handle repos without remote master

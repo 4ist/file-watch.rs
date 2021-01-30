@@ -1,12 +1,33 @@
 use std::fs;
 use std::process::Command;
 use std::env;
+use std::io;
+use config::Config;
+use std::collections::HashMap;
+use std::path::PathBuf;
 
 fn main() {
     
 
+   // println!("configgggg - {:?}", lil_config.try_into::<HashMap<String, String>>().unwrap());
+
     let dir = env::current_dir().unwrap();
+
+    //let adir = inner_main().expect("Couldn't");
+    let mut adir = env::current_exe().unwrap();
+    adir.pop();
+
     println!("file-watch.rs: pushing files in {}", dir.display());
+    println!("file-watch.rs: pushing files in {}", adir.display());
+
+    /*
+    let mut lil_config = Config::default();
+    lil_config
+         .merge(adir);
+        .merge(config::File::with_name("config")).unwrap();
+        //.merge(config::Environment::with_prefix("APP")).unwrap();
+    */
+
 
     /*
     let file = fs::File::open("config.json")
@@ -27,7 +48,7 @@ fn main() {
     let commands = vec![&git_add, &git_commit, &git_push];
     let iterable_commands = commands.iter();
 
-    let enabled = true;
+    let enabled = false;
     if !enabled{
         println!("committing not enabled; exiting");
         return

@@ -37,20 +37,21 @@ fn main() {
 
     let os = lil_config.get("OS").expect("file should have OS key");
 
-    let commands = get_commands(&os);
+    let commands = get_commands(&os).unwrap();
+
     for command in commands.iter(){
-        let mut acommand = command.clone();
-        acommand.status().expect("failed to execute process"); //? why is this throwing an error if I'm doint the same thing in get_windows_commands?
+        let acommand = command.clone();
+        acommand.status().expect("failed to execute process"); //? why is this throwing an error if I'm doing the same thing in get_windows_commands?
     }
 }
 
-fn get_commands(os: &str) -> Vec<Command>{   //TODO figure out how to return an iterable
+fn get_commands(os: &str) -> Result<Vec<Command>, &'static str>{   //TODO figure out how to return an iterable
     let app_commands = get_git_commands();
     match &os[..] {
-        "windows" => get_windows_commands(app_commands),
+        "windows" => Ok(get_windows_commands(app_commands)),
         //"linux" => println!("OS config = linux"),
         _ => panic!("unsupported OS config: {}", &os[..])
-    }
+    }    
 }
 
 fn get_windows_commands(app_commands: Vec<Vec<String>>) -> Vec<Command>{

@@ -2,6 +2,7 @@ use std::fs;
 use std::process::Command;
 use std::env;
 use std::io;
+use std::fmt;
 use config::Config;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -26,8 +27,8 @@ fn main() {
 
     let mut config = Config::default();
     config.merge(config::File::with_name(&config_path)).unwrap();
-    let lil_config = config.try_into::<HashMap<String, String>>().unwrap();
-    println!("Config: {:?}", lil_config);
+    let app_config = config.try_into::<HashMap<String, String>>().unwrap();
+    println!("Config: {:?}", app_config);
     
     let enabled = true;
     if !enabled{
@@ -35,18 +36,17 @@ fn main() {
         return
     }
 
-    let os = lil_config.get("OS").expect("file should have OS key");
+    let os = app_config.get("OS").expect("file should have OS key");
 
     let mut commands = get_commands(&os);
-    //let iterable_commands = commands.iter();
     for command in &mut commands{
-        //let mut acommand = command.as_mut();
-        command.status().expect("failed to execute process"); //? why is this throwing an error if I'm doing the same thing in get_windows_commands?
-        //TODO add a struct to replace the command object; admit defeat
+        //println!("{}", command);
+        command.status().expect("failed to execute process");
     }
 }
 
-fn get_commands(os: &str) -> Vec<Command>{   //TODO figure out how to return an iterable
+fn get_commands(os: &str) -> Vec<Command>{
+    //TODO panic if bad config
     let app_commands = get_git_commands();
     match &os[..] {
         "windows" => get_windows_commands(app_commands),

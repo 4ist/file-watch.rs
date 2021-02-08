@@ -40,7 +40,7 @@ fn main() {
 
     let mut commands = get_commands(&os);
     for command in &mut commands{
-        //println!("{}", command);
+        //println!("{}", command); //TODO figure out how to display command (do I need to add an implementation of the display trait?)
         command.status().expect("failed to execute process");
     }
 }

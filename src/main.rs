@@ -37,9 +37,9 @@ fn main() {
 
     let os = lil_config.get("OS").expect("file should have OS key");
 
-    let commands = get_commands(&os);
-    let iterable_commands = commands.iter();
-    for command in iterable_commands{
+    let mut commands = get_commands(&os);
+    //let iterable_commands = commands.iter();
+    for command in &mut commands{
         //let mut acommand = command.as_mut();
         command.status().expect("failed to execute process"); //? why is this throwing an error if I'm doing the same thing in get_windows_commands?
         //TODO add a struct to replace the command object; admit defeat
